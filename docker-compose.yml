@@ -1,0 +1,25 @@
+version: '3'
+
+networks:
+
+  app-tier:
+    driver: bridge
+
+services:
+
+  httpd:
+    container_name: nginx-vue
+    image: asapdotid/nginx:${NGINX_VERSION}-${OS_VERSION}
+    restart: always
+    environment:
+      - 'TZ=${TIMEZONE}'
+    networks:
+      - app-tier
+    ports:
+      - '80:8080'
+      - '443:443'
+    volumes:
+      - ./config/nginx/nginx.conf:/opt/bitnami/nginx/conf/nginx.conf:ro
+      - ./config/nginx/vhost:/opt/bitnami/nginx/conf/vhosts:ro
+      - ./logs/nginx:/opt/bitnami/nginx/logs:rw
+      - ./public-html:/app:rw
